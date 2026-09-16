@@ -40,6 +40,10 @@ namespace Sage.Active.Cli
                     case "invoices":
                         await InvoiceCommand.ExecuteAsync(subArgs);
                         break;
+                    case "env":
+                    case "environment":
+                        EnvCommand.Execute(subArgs);
+                        break;
                     case "scaffold":
                         ScaffoldCommand.Execute(subArgs);
                         break;
@@ -81,6 +85,7 @@ namespace Sage.Active.Cli
             Console.WriteLine("  query <query>     Execute an arbitrary GraphQL query or query from a .graphql file");
             Console.WriteLine("  invoice [list]    List recent sales invoices");
             Console.WriteLine("  invoice create    Create and post a test sales invoice in Sandbox");
+            Console.WriteLine("  env [production|sandbox] View or toggle active environment");
             Console.WriteLine("  scaffold [type]   Scaffold starter boilerplate: minimal (API) or console");
             Console.WriteLine("  version           Display CLI version\n");
             Console.WriteLine("Environment Variables:");

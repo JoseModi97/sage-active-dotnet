@@ -16,7 +16,7 @@
   <a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-netstandard2.0%20%7C%20net5.0%20%7C%20net6.0%20%7C%20net7.0%20%7C%20net8.0%20%7C%20net9.0-blue.svg" alt=".NET Targets" /></a>
 </p>
 
-An all-in-one .NET library and CLI companion for **Sage Active Public API V2** (powered by Hot Chocolate GraphQL). Built with zero unnecessary dependencies, automated OAuth 2.0 SBC Auth token refreshing, rate limit backoff (3,000 req/min), multi-legislation support (France, Spain, Germany, Portugal), and typed models covering **all 468+ API operations**.
+An all-in-one .NET library and CLI companion for **Sage Active Public API V2** (powered by Hot Chocolate GraphQL). Built with zero unnecessary dependencies, automated OAuth 2.0 SBC Auth token refreshing, rate limit backoff (3,000 req/min), multi-legislation support (France, Spain, Germany, Portugal), and typed models covering **all 468+ API operations** in both **Sandbox** and **Production** environments.
 
 Authored by [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nuget.org/profiles/Modi97).
 
@@ -27,6 +27,7 @@ Authored by [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nu
 - [Highlights](#highlights)
 - [Package Suite](#package-suite)
 - [Installation](#installation)
+- [Configuring Environments: Production vs Sandbox](#configuring-environments-production-vs-sandbox)
 - [Zero-Code CLI Tool (`sage-active`)](#zero-code-cli-tool-sage-active)
 - [Quickstart: ASP.NET Core Minimal APIs](#quickstart-aspnet-core-minimal-apis)
 - [Quickstart: ASP.NET Core MVC](#quickstart-aspnet-core-mvc)
@@ -36,7 +37,7 @@ Authored by [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nu
 - [General Ledger & Accounting Entries](#general-ledger--accounting-entries)
 - [Multipart File Uploads & OCR Processing](#multipart-file-uploads--ocr-processing)
 - [Dynamic Multidimensional Analytics Cubes](#dynamic-multidimensional-analytics-cubes)
-- [Regional Gateways & Sandboxes](#regional-gateways--sandboxes)
+- [Regional Gateways & Endpoints](#regional-gateways--endpoints)
 - [.NET Compatibility Matrix](#net-compatibility-matrix)
 - [Contributing & License](#contributing--license)
 
@@ -45,8 +46,9 @@ Authored by [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nu
 ## Highlights
 
 * **100% Wire Coverage**: Directly supports every single operation from Sage's 468-request Postman library across General Ledger, Accounting, Sales Invoicing, Purchase Invoices, Banking, Third Parties, Products, OCR, and Catalog Analytics.
+* **Dual Environment Support**: Seamless switching between Developer **Sandbox** (testing & prototyping) and **Production** (live enterprise operations) via config, environment variables, or CLI.
 * **Universal .NET Compatibility**: Multi-targeted for `netstandard2.0`, `netcoreapp3.1`, `net5.0`, `net6.0`, `net7.0`, `net8.0`, and `net9.0` (compatible with .NET Framework 4.6.1+, .NET 5+, and all modern .NET releases).
-* **Zero-Code Setup CLI**: Companion global tool (`dotnet-sage-active` / `sage-active`) with interactive onboarding wizard, connectivity diagnostics, organization switcher, and project scaffolder.
+* **Zero-Code Setup CLI**: Companion global tool (`dotnet-sage-active` / `sage-active`) with interactive onboarding wizard, connectivity diagnostics, environment switcher, organization manager, and project scaffolder.
 * **Production-Ready Resilience**: Automatic OAuth 2.0 SBC Auth token acquisition, token refresh with thread-safe locking, exponential backoff on HTTP 429 (3,000 req/min limit), and GraphQL multipart uploads.
 * **First-Class ASP.NET Core**: Clean dependency injection (`AddSageActive`), Minimal API routes (`MapSageWebhook`), and health check extensions.
 
@@ -58,7 +60,7 @@ Authored by [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nu
 |---|---|---|---|
 | **Core SDK** | [`Sage.Active`](https://www.nuget.org/packages/Sage.Active) | `netstandard2.0`, `netcoreapp3.1`, `net5.0`, `net6.0`, `net7.0`, `net8.0`, `net9.0` | Core GraphQL engine, SBC Auth, entities, and 11 domain subclients |
 | **ASP.NET Core** | [`Sage.Active.AspNetCore`](https://www.nuget.org/packages/Sage.Active.AspNetCore) | `netstandard2.0`, `netcoreapp3.1`, `net5.0`, `net6.0`, `net7.0`, `net8.0`, `net9.0` | Dependency Injection (`AddSageActive`) and Minimal API webhook mapping |
-| **Global CLI** | [`dotnet-sage-active`](https://www.nuget.org/packages/dotnet-sage-active) | `net8.0` (runs on .NET 8, 9, 10+) | Terminal setup wizard, self-tests, sandbox invoice generator, and query runner |
+| **Global CLI** | [`dotnet-sage-active`](https://www.nuget.org/packages/dotnet-sage-active) | `net8.0` (runs on .NET 8, 9, 10+) | Terminal setup wizard, environment switcher, self-tests, sandbox invoice generator, and query runner |
 
 ---
 
@@ -81,6 +83,109 @@ dotnet tool install --global dotnet-sage-active
 
 ---
 
+## Configuring Environments: Production vs Sandbox
+
+Sage Active operates in two environments:
+* **`Sandbox`**: Isolated developer environment for development, schema prototyping, and testing workflows with sandbox organizations without affecting financial records.
+* **`Production`**: Live corporate gateway for real accounting ledgers, fiscal filings, real-world customer invoicing, and connected bank reconciliation.
+
+### 1. ASP.NET Core Configuration
+
+ASP.NET Core automatically applies configuration depending on your runtime environment:
+
+#### Development / Sandbox (`appsettings.Development.json`)
+```json
+{
+  "SageActive": {
+    "Region": "FR",
+    "Environment": "Sandbox",
+    "SubscriptionKey": "YOUR_SANDBOX_SUBSCRIPTION_KEY",
+    "OrganizationId": "YOUR_SANDBOX_ORGANIZATION_ID",
+    "ClientId": "YOUR_SANDBOX_CLIENT_ID",
+    "ClientSecret": "YOUR_SANDBOX_CLIENT_SECRET"
+  }
+}
+```
+
+#### Production (`appsettings.Production.json` or Environment Variables)
+```json
+{
+  "SageActive": {
+    "Region": "FR",
+    "Environment": "Production",
+    "SubscriptionKey": "YOUR_PRODUCTION_SUBSCRIPTION_KEY",
+    "OrganizationId": "YOUR_PRODUCTION_ORGANIZATION_ID",
+    "ClientId": "YOUR_PRODUCTION_CLIENT_ID",
+    "ClientSecret": "YOUR_PRODUCTION_CLIENT_SECRET"
+  }
+}
+```
+
+> **Production Deployment Tip**: When deploying to Docker, Azure, AWS, or Kubernetes, set environment variables directly without committing secret keys to code:
+> * `SageActive__Environment` = `Production`
+> * `SageActive__Region` = `FR` (or `ES`, `DE`, `PT`)
+> * `SageActive__SubscriptionKey` = `PROD_KEY`
+> * `SageActive__OrganizationId` = `PROD_ORGANIZATION_UUID`
+
+---
+
+### 2. Standalone C# Code: Explicit Environment Selection
+
+Instantiate clients targeting either environment directly:
+
+```csharp
+using Sage.Active;
+using Sage.Active.Models;
+
+// ?? Production Environment Setup
+var prodClient = new SageActiveClient(new SageActiveConfig
+{
+    Region = SageRegion.FR,
+    Environment = SageEnvironment.Production,
+    SubscriptionKey = "PROD_SUBSCRIPTION_KEY",
+    OrganizationId = "PROD_COMPANY_ORGANIZATION_UUID"
+});
+
+// ?? Sandbox Environment Setup
+var sandboxClient = new SageActiveClient(new SageActiveConfig
+{
+    Region = SageRegion.FR,
+    Environment = SageEnvironment.Sandbox,
+    SubscriptionKey = "SANDBOX_SUBSCRIPTION_KEY",
+    OrganizationId = "SANDBOX_ORGANIZATION_UUID"
+});
+
+// Or using the quick factory method:
+var client = SageActiveClient.Create(
+    subscriptionKey: "PROD_KEY",
+    organizationId: "PROD_ORG_ID",
+    region: SageRegion.FR,
+    environment: SageEnvironment.Production
+);
+```
+
+---
+
+### 3. Global CLI Tool: Environment Switcher
+
+You can inspect or switch the active CLI environment at any time:
+
+```bash
+# Check current environment
+sage-active env
+
+# Switch to Production
+sage-active env production
+
+# Switch to Sandbox
+sage-active env sandbox
+
+# Or run the interactive setup wizard to configure both:
+sage-active init
+```
+
+---
+
 ## Zero-Code CLI Tool (`sage-active`)
 
 The `sage-active` CLI tool allows you to configure, test, and operate Sage Active without writing code:
@@ -98,7 +203,8 @@ The `sage-active` CLI tool allows you to configure, test, and operate Sage Activ
 
 | Command | Description | Example |
 |---|---|---|
-| `sage-active init` | Interactive setup wizard (prompts for region, sandbox/prod, credentials, queries organizations, and saves configuration) | `sage-active init` |
+| `sage-active init` | Interactive setup wizard (prompts for region, sandbox/production, credentials, queries organizations, and saves configuration) | `sage-active init` |
+| `sage-active env [target]` | View or switch environment between `production` and `sandbox` | `sage-active env production` |
 | `sage-active test` | Self-test connectivity, user profile, and validates permissions using `userAccessPolicyCheck` | `sage-active test` |
 | `sage-active org` | Lists available organizations and shows which organization is currently active | `sage-active org` |
 | `sage-active org set <id>` | Switches the active organization ID | `sage-active org set 0000-0000-0000` |
@@ -116,7 +222,7 @@ The `sage-active` CLI tool allows you to configure, test, and operate Sage Activ
 {
   "SageActive": {
     "Region": "FR",
-    "Environment": "Sandbox",
+    "Environment": "Production",
     "SubscriptionKey": "YOUR_SAGE_SUBSCRIPTION_KEY",
     "OrganizationId": "YOUR_SAGE_ORGANIZATION_ID",
     "ClientId": "YOUR_CLIENT_ID",
@@ -217,10 +323,11 @@ using System.Threading.Tasks;
 using Sage.Active;
 using Sage.Active.Models;
 
+// Configure for either Production or Sandbox
 var config = new SageActiveConfig
 {
     Region = SageRegion.FR,
-    Environment = SageEnvironment.Sandbox,
+    Environment = SageEnvironment.Production, // or SageEnvironment.Sandbox
     SubscriptionKey = "YOUR_SUBSCRIPTION_KEY",
     OrganizationId = "YOUR_ORGANIZATION_ID",
     AccessToken = "YOUR_BEARER_TOKEN"
@@ -402,7 +509,7 @@ foreach (var row in cube.Rows)
 
 ---
 
-## Regional Gateways & Sandboxes
+## Regional Gateways & Endpoints
 
 Preconfigured endpoints for all European legislations:
 
