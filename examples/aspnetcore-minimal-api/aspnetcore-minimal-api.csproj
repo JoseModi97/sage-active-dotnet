@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>sage-active-minimal-api-example</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sage.Active" Version="1.0.0" />
+    <PackageReference Include="Sage.Active.AspNetCore" Version="1.0.0" />
+  </ItemGroup>
+
+</Project>
