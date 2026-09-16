@@ -10,7 +10,7 @@
 
     <!-- Package Metadata for NuGet & GitHub SEO -->
     <PackageId>Sage.Active</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Modi97, Jose Modi</Authors>
     <Company>Modi97</Company>
     <Copyright>Copyright (c) 2026 Jose Modi</Copyright>
@@ -20,7 +20,7 @@
     <RepositoryUrl>https://github.com/JoseModi97/sage-active-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>sage;sage-active;sage-api;sage-cloud;accounting;erp;invoicing;billing;graphql;hot-chocolate;france;spain;germany;portugal;oauth2;cli;dotnet-tool</PackageTags>
-    <PackageReleaseNotes>1.0.0: Initial release covering complete Sage Active V2 GraphQL API specifications, regional sandboxes, and multi-targeting across all .NET versions.</PackageReleaseNotes>
+    <PackageReleaseNotes>1.0.1: Added dual Sandbox and Production documentation, examples suite across 5 hosting models, zero-prompt FrameworkDetector, and Pesapal open source sponsorship.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
 
     <!-- Source Link & Debug Symbols -->
