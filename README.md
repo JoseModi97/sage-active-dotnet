@@ -39,6 +39,7 @@ Authored by [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nu
 - [Dynamic Multidimensional Analytics Cubes](#dynamic-multidimensional-analytics-cubes)
 - [Regional Gateways & Endpoints](#regional-gateways--endpoints)
 - [.NET Compatibility Matrix](#net-compatibility-matrix)
+- [Sponsorship](#sponsorship)
 - [Contributing & License](#contributing--license)
 
 ---
@@ -528,9 +529,19 @@ Preconfigured endpoints for all European legislations:
 |---|---|
 | **.NET 5.0** | **Native Target (`net5.0`) + Fallback (`netstandard2.0`)** |
 | **.NET 6.0, 7.0, 8.0, 9.0, 10.0+** | **Native Targets (`net6.0`, `net7.0`, `net8.0`, `net9.0`)** |
-| **.NET Core (2.0 – 3.1)** | **Supported via `netcoreapp3.1` and `netstandard2.0`** |
-| **.NET Framework (4.6.1 – 4.8.1)** | **Supported via `netstandard2.0`** |
+| **.NET Core (2.0 ï¿½ 3.1)** | **Supported via `netcoreapp3.1` and `netstandard2.0`** |
+| **.NET Framework (4.6.1 ï¿½ 4.8.1)** | **Supported via `netstandard2.0`** |
 | **Mono / Xamarin / Unity / MAUI** | **Supported via `netstandard2.0`** |
+
+---
+
+## Sponsorship
+
+If this SDK or CLI suite helps you in your projects or commercial integrations, consider supporting ongoing open-source maintenance and development:
+
+<iframe width="200" height="40" src="https://store.pesapal.com/embed-code?pageUrl=https://store.pesapal.com/opensourcesponsorship" frameborder="0" allowfullscreen></iframe>
+
+ðŸ‘‰ **[Support via Pesapal Open Source Sponsorship](https://store.pesapal.com/opensourcesponsorship)**
 
 ---
 
@@ -538,4 +549,4 @@ Preconfigured endpoints for all European legislations:
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
 
-MIT License © [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nuget.org/profiles/Modi97)
+MIT License ï¿½ [Jose Modi](https://github.com/JoseModi97) / [Modi97](https://www.nuget.org/profiles/Modi97)
