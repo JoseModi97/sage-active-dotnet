@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RollForward>LatestMajor</RollForward>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
+    <!-- Global Tool Metadata adhering to Microsoft Package Authoring Best Practices -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>sage-active</ToolCommandName>
+    <PackageId>dotnet-sage-active</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Modi97, Jose Modi</Authors>
+    <Company>Modi97</Company>
+    <Copyright>Copyright (c) 2026 Jose Modi</Copyright>
+    <Description>Global CLI tool and setup wizard for Sage Active Public API V2. Easily scaffold projects, test authentication and access policies, query GraphQL, and manage invoices directly from the terminal.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/JoseModi97/sage-active-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JoseModi97/sage-active-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>sage;sage-active;cli;dotnet-tool;accounting;graphql;invoicing</PackageTags>
+    <PackageReleaseNotes>1.0.0: Initial release of the sage-active CLI with interactive setup wizard, self-tests, and query executor.</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sage.Active\Sage.Active.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,17 @@
+## Visual Studio & .NET build artifacts
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+.vscode/
+
+## Packages
+*.nupkg
+*.snupkg
+
+## Local configuration secrets
+sageactive.config.json
+appsettings.Development.json
+*.env

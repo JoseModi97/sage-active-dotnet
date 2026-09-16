@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'netcoreapp3.1'">enable</ImplicitUsings>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
+
+    <!-- Package Metadata for NuGet & GitHub SEO -->
+    <PackageId>Sage.Active</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Modi97, Jose Modi</Authors>
+    <Company>Modi97</Company>
+    <Copyright>Copyright (c) 2026 Jose Modi</Copyright>
+    <Description>Idiomatic, enterprise-ready .NET SDK for the Sage Active Public API V2 (GraphQL). Full support for Accounting, Sales, Purchases, Banking, Third Parties, OCR, Catalog Analytics, and OAuth 2.0 with zero external dependencies.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/JoseModi97/sage-active-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/JoseModi97/sage-active-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>sage;sage-active;sage-api;sage-cloud;accounting;erp;invoicing;billing;graphql;hot-chocolate;france;spain;germany;portugal;oauth2;cli;dotnet-tool</PackageTags>
+    <PackageReleaseNotes>1.0.0: Initial release covering complete Sage Active V2 GraphQL API specifications, regional sandboxes, and multi-targeting across all .NET versions.</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <!-- Source Link & Debug Symbols -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netcoreapp3.1'">
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
