@@ -1,27 +1,13 @@
-<p align="center">
-  <img src="icon.png" width="128" height="128" alt="Sage.Active .NET Logo" />
-</p>
+# Sage.Active - Sage Active Public API V2 Client for .NET
 
-<h1 align="center">Sage.Active</h1>
+[![NuGet](https://img.shields.io/nuget/v/Sage.Active.svg)](https://www.nuget.org/packages/Sage.Active)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Sage.Active.svg)](https://www.nuget.org/packages/Sage.Active)
+[![Build Status](https://github.com/JoseModi97/sage-active-dotnet/actions/workflows/release.yml/badge.svg)](https://github.com/JoseModi97/sage-active-dotnet/actions/workflows/release.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-netstandard2.0%20%7C%20net5.0%20%7C%20net6.0%20%7C%20net7.0%20%7C%20net8.0%20%7C%20net9.0-blue.svg)](https://dotnet.microsoft.com/)
+[![Sponsor on Pesapal](https://img.shields.io/badge/Sponsor_via-Pesapal-0099ff.svg?logo=heart&logoColor=white)](https://store.pesapal.com/opensourcesponsorship)
 
-<p align="center">
-  <strong>Idiomatic, enterprise-grade .NET Client SDK, ASP.NET Core Adapter, and Global CLI Tool for the Sage Active Public API V2 (GraphQL).</strong>
-</p>
-
-<p align="center">
-  <a href="https://www.nuget.org/packages/Sage.Active"><img src="https://img.shields.io/nuget/v/Sage.Active.svg" alt="NuGet Version" /></a>
-  <a href="https://www.nuget.org/packages/Sage.Active"><img src="https://img.shields.io/nuget/dt/Sage.Active.svg" alt="NuGet Downloads" /></a>
-  <a href="https://github.com/JoseModi97/sage-active-dotnet/actions/workflows/release.yml"><img src="https://github.com/JoseModi97/sage-active-dotnet/actions/workflows/release.yml/badge.svg" alt="Build Status" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" /></a>
-  <a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-netstandard2.0%20%7C%20net5.0%20%7C%20net6.0%20%7C%20net7.0%20%7C%20net8.0%20%7C%20net9.0-blue.svg" alt=".NET Targets" /></a>
-  <a href="https://store.pesapal.com/opensourcesponsorship"><img src="https://img.shields.io/badge/Sponsor-Pesapal-0099ff.svg?logo=heart&logoColor=white" alt="Sponsor on Pesapal" /></a>
-</p>
-
-<p align="center">
-  <a href="https://store.pesapal.com/opensourcesponsorship">
-    <img src="https://img.shields.io/badge/❤️_Sponsor_This_Project-Pesapal_Open_Source-0099ff?style=for-the-badge&logo=heart&logoColor=white" alt="Sponsor This Project via Pesapal" height="36" />
-  </a>
-</p>
+[![Sponsor This Project via Pesapal](https://img.shields.io/badge/%E2%9D%A4%EF%B8%8F_Sponsor_This_Project-Pesapal_Open_Source-0099ff?style=for-the-badge&logo=heart&logoColor=white)](https://store.pesapal.com/opensourcesponsorship)
 
 An all-in-one .NET library and CLI companion for **Sage Active Public API V2** (powered by Hot Chocolate GraphQL). Built with zero unnecessary dependencies, automated OAuth 2.0 SBC Auth token refreshing, rate limit backoff (3,000 req/min), multi-legislation support (France, Spain, Germany, Portugal), and typed models covering **all 468+ API operations** in both **Sandbox** and **Production** environments.
 
@@ -546,11 +532,7 @@ Preconfigured endpoints for all European legislations:
 
 If this SDK or CLI suite helps you in your projects or commercial integrations, consider supporting ongoing open-source maintenance and development:
 
-<p align="left">
-  <a href="https://store.pesapal.com/opensourcesponsorship">
-    <img src="https://img.shields.io/badge/Sponsor_via-Pesapal-0099ff?style=for-the-badge&logo=heart&logoColor=white" alt="Sponsor via Pesapal" height="38" />
-  </a>
-</p>
+[![Sponsor via Pesapal](https://img.shields.io/badge/Sponsor_via-Pesapal-0099ff?style=for-the-badge&logo=heart&logoColor=white)](https://store.pesapal.com/opensourcesponsorship)
 
 👉 **[Click here to Support via Pesapal Open Source Sponsorship](https://store.pesapal.com/opensourcesponsorship)**
 

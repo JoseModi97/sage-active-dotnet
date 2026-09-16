@@ -13,7 +13,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>sage-active</ToolCommandName>
     <PackageId>dotnet-sage-active</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Modi97, Jose Modi</Authors>
     <Company>Modi97</Company>
     <Copyright>Copyright (c) 2026 Jose Modi</Copyright>
@@ -23,8 +23,9 @@
     <RepositoryUrl>https://github.com/JoseModi97/sage-active-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>sage;sage-active;cli;dotnet-tool;accounting;graphql;invoicing</PackageTags>
-    <PackageReleaseNotes>1.0.1: Added zero-prompt FrameworkDetector for automatic project detection and scaffolding, environment switcher, and Pesapal open source sponsorship.</PackageReleaseNotes>
+    <PackageReleaseNotes>1.0.2: Converted README to strict CommonMark for optimal rendering on NuGet.org, packaged icon.png, and added Pesapal open source sponsorship button.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,6 +35,7 @@
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+    <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
