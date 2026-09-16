@@ -539,9 +539,13 @@ Preconfigured endpoints for all European legislations:
 
 If this SDK or CLI suite helps you in your projects or commercial integrations, consider supporting ongoing open-source maintenance and development:
 
-<iframe width="200" height="40" src="https://store.pesapal.com/embed-code?pageUrl=https://store.pesapal.com/opensourcesponsorship" frameborder="0" allowfullscreen></iframe>
+<p align="left">
+  <a href="https://store.pesapal.com/opensourcesponsorship">
+    <img src="https://img.shields.io/badge/Sponsor_via-Pesapal-0099ff?style=for-the-badge&logo=heart&logoColor=white" alt="Sponsor via Pesapal" height="38" />
+  </a>
+</p>
 
-👉 **[Support via Pesapal Open Source Sponsorship](https://store.pesapal.com/opensourcesponsorship)**
+👉 **[Click here to Support via Pesapal Open Source Sponsorship](https://store.pesapal.com/opensourcesponsorship)**
 
 ---
 
