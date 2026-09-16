@@ -44,6 +44,8 @@ namespace Sage.Active.Cli
                     case "environment":
                         EnvCommand.Execute(subArgs);
                         break;
+                    case "detect":
+                        return DetectCommand.Run();
                     case "scaffold":
                         ScaffoldCommand.Execute(subArgs);
                         break;
