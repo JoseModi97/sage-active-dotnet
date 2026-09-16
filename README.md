@@ -212,11 +212,13 @@ The `sage-active` CLI tool allows you to configure, test, and operate Sage Activ
 ## Quickstart: ASP.NET Core Minimal APIs
 
 ### 1. Configure Credentials (`appsettings.json`)
+> **Note on Environments:** Set `"Environment": "Sandbox"` for development/testing against Sage's mock sandbox API (`https://sandbox-active.sage.com/api/v2`), or `"Environment": "Production"` for live enterprise operations (`https://active.sage.com/api/v2`).
+
 ```json
 {
   "SageActive": {
     "Region": "FR",
-    "Environment": "Production",
+    "Environment": "Sandbox", // Set to "Sandbox" for testing, or "Production" for live operations
     "SubscriptionKey": "YOUR_SAGE_SUBSCRIPTION_KEY",
     "OrganizationId": "YOUR_SAGE_ORGANIZATION_ID",
     "ClientId": "YOUR_CLIENT_ID",
