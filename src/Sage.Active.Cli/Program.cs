@@ -72,7 +72,7 @@ namespace Sage.Active.Cli
                     case "version":
                     case "-v":
                     case "--version":
-                        Console.WriteLine("dotnet-sage-active version 1.0.3");
+                        Console.WriteLine("dotnet-sage-active version 1.1.0");
                         break;
                     default:
                         Prompter.Error($"Unknown command: '{command}'. Run 'sage-active --help' for usage.");

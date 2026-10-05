@@ -13,7 +13,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>sage-active</ToolCommandName>
     <PackageId>dotnet-sage-active</PackageId>
-    <Version>1.0.3</Version>
+    <Version>1.1.0</Version>
     <Authors>Modi97, Jose Modi</Authors>
     <Company>Modi97</Company>
     <Copyright>Copyright (c) 2026 Jose Modi</Copyright>
@@ -23,7 +23,7 @@
     <RepositoryUrl>https://github.com/JoseModi97/sage-active-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>sage;sage-active;cli;dotnet-tool;accounting;graphql;invoicing</PackageTags>
-    <PackageReleaseNotes>1.0.3: Clarified Sandbox vs Production environment configuration in Quickstart appsettings.json documentation.</PackageReleaseNotes>
+    <PackageReleaseNotes>1.1.0: Added quote, order, tariff, tax, and bank CLI commands.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>

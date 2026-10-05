@@ -10,7 +10,7 @@
 
     <!-- Package Metadata for NuGet & GitHub SEO -->
     <PackageId>Sage.Active</PackageId>
-    <Version>1.0.3</Version>
+    <Version>1.1.0</Version>
     <Authors>Modi97, Jose Modi</Authors>
     <Company>Modi97</Company>
     <Copyright>Copyright (c) 2026 Jose Modi</Copyright>
@@ -20,7 +20,7 @@
     <RepositoryUrl>https://github.com/JoseModi97/sage-active-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>sage;sage-active;sage-api;sage-cloud;accounting;erp;invoicing;billing;graphql;hot-chocolate;france;spain;germany;portugal;oauth2;cli;dotnet-tool</PackageTags>
-    <PackageReleaseNotes>1.0.3: Clarified Sandbox vs Production environment configuration in Quickstart appsettings.json documentation.</PackageReleaseNotes>
+    <PackageReleaseNotes>1.1.0: Enterprise feature expansion (quotes, orders, credit note generation, sales tariffs, fiscal taxes and groups, payment terms, AP OCR receipt ingestion, bank unreconciliation, per-call organization scoping, and mutation concurrency throttling). 100% backward compatible.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
 
