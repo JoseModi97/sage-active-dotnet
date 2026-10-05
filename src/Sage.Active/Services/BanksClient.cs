@@ -107,6 +107,23 @@ namespace Sage.Active.Services
             return result.PaymentMethods;
         }
 
+        /// <summary>
+        /// Unreconciles a previously reconciled bank movement transaction.
+        /// </summary>
+        public async Task<string> UnreconcileMovementAsync(string bankTransactionId, CancellationToken cancellationToken = default)
+        {
+            const string mutation = @"
+            mutation ($input: UnReconcileBankMovementGLDtoInput!) {
+                unReconcileBankMovement(input: $input) {
+                    id
+                }
+            }";
+
+            var variables = new { input = new { bankTransactionId } };
+            var result = await _transport.SendQueryAsync<UnreconcileResponse>(mutation, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.UnReconcileBankMovement.Id;
+        }
+
         private class BankAccountsResponse
         {
             [JsonPropertyName("bankAccounts")]
@@ -123,6 +140,18 @@ namespace Sage.Active.Services
         {
             [JsonPropertyName("reconcileBankMovement")]
             public bool Success { get; set; }
+        }
+
+        private class UnreconcileResponse
+        {
+            [JsonPropertyName("unReconcileBankMovement")]
+            public UnreconcileResult UnReconcileBankMovement { get; set; } = new UnreconcileResult();
+        }
+
+        public class UnreconcileResult
+        {
+            [JsonPropertyName("id")]
+            public string Id { get; set; } = string.Empty;
         }
 
         private class PaymentMethodsResponse

@@ -418,6 +418,46 @@ foreach (var item in openItems.Nodes)
 }
 ```
 
+### Commercial Quotes, Orders & Credit Notes
+
+Manage pre-sales documents, sales orders, and compensatory credit notes:
+
+```csharp
+// 1. Create and list commercial quotes (Devis)
+var quoteId = await client.Sales.CreateQuoteAsync(new SalesQuoteCreateInput
+{
+    CustomerId = "CUSTOMER_UUID",
+    DocumentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"),
+    Lines = new List<SalesQuoteLineInput>
+    {
+        new SalesQuoteLineInput { ProductId = "PRODUCT_UUID", TotalQuantity = 1, UnitPrice = 1200m }
+    }
+});
+var quotes = await client.Sales.GetQuotesAsync();
+
+// 2. Create and list sales orders (Commandes)
+var orderId = await client.Sales.CreateOrderAsync(new SalesOrderCreateInput
+{
+    CustomerId = "CUSTOMER_UUID",
+    DocumentDate = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd"),
+    Lines = new List<SalesOrderLineInput>
+    {
+        new SalesOrderLineInput { ProductId = "PRODUCT_UUID", TotalQuantity = 5, UnitPrice = 250m }
+    }
+});
+var orders = await client.Sales.GetOrdersAsync();
+
+// 3. Compensate or reverse a posted sales invoice with a credit note (Avoir)
+var creditNoteId = await client.Sales.GenerateCreditNoteAsync(invoiceId);
+```
+
+### Multi-Tenant Organization Isolation
+
+```csharp
+// Create a tenant-scoped clone reusing connection pools, auth caches, and throttlers:
+var tenantClient = client.WithOrganization("TENANT_BRANCH_UUID");
+```
+
 ---
 
 ## General Ledger & Accounting Entries

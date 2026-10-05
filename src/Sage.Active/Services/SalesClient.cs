@@ -169,6 +169,142 @@ namespace Sage.Active.Services
             return (invoiceId, closed.OperationalNumber, posted.AccountingEntryNumber);
         }
 
+        /// <summary>
+        /// Retrieves commercial sales quotes (devis).
+        /// </summary>
+        public async Task<Connection<SalesQuote>> GetQuotesAsync(int first = 50, CancellationToken cancellationToken = default)
+        {
+            const string query = @"
+            query ($first: Int!) {
+                salesQuotes(order: [{ documentDate: DESC }], first: $first) {
+                    edges {
+                        node {
+                            id
+                            operationalNumber
+                            documentDate
+                            creationDate
+                            customerId
+                            socialName
+                            status
+                            declinedReason
+                            totalNet
+                            discount
+                            documentTypeId
+                            lines {
+                                id
+                                order
+                                productId
+                                productCode
+                                productName
+                                totalQuantity
+                                unitPrice
+                                firstDiscount
+                                totalNet
+                            }
+                        }
+                    }
+                    totalCount
+                }
+            }";
+
+            var variables = new { first };
+            var result = await _transport.SendQueryAsync<SalesQuotesResponse>(query, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.SalesQuotes;
+        }
+
+        /// <summary>
+        /// Creates a commercial sales quote.
+        /// </summary>
+        public async Task<string> CreateQuoteAsync(SalesQuoteCreateInput input, CancellationToken cancellationToken = default)
+        {
+            const string mutation = @"
+            mutation ($values: SalesQuoteCreateGLDtoInput!) {
+                createSalesQuote(input: $values) {
+                    id
+                }
+            }";
+
+            var variables = new { values = input };
+            var result = await _transport.SendQueryAsync<CreateQuoteResponse>(mutation, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.CreateSalesQuote.Id;
+        }
+
+        /// <summary>
+        /// Retrieves sales orders (commandes de vente).
+        /// </summary>
+        public async Task<Connection<SalesOrder>> GetOrdersAsync(int first = 50, CancellationToken cancellationToken = default)
+        {
+            const string query = @"
+            query ($first: Int!) {
+                salesOrders(order: [{ documentDate: DESC }], first: $first) {
+                    edges {
+                        node {
+                            id
+                            operationalNumber
+                            documentDate
+                            creationDate
+                            customerId
+                            socialName
+                            status
+                            totalNet
+                            discount
+                            documentTypeId
+                            lines {
+                                id
+                                order
+                                productId
+                                productCode
+                                productName
+                                totalQuantity
+                                unitPrice
+                                firstDiscount
+                                totalNet
+                            }
+                        }
+                    }
+                    totalCount
+                }
+            }";
+
+            var variables = new { first };
+            var result = await _transport.SendQueryAsync<SalesOrdersResponse>(query, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.SalesOrders;
+        }
+
+        /// <summary>
+        /// Creates a sales order.
+        /// </summary>
+        public async Task<string> CreateOrderAsync(SalesOrderCreateInput input, CancellationToken cancellationToken = default)
+        {
+            const string mutation = @"
+            mutation ($values: SalesOrderCreateGLDtoInput!) {
+                createSalesOrder(input: $values) {
+                    id
+                }
+            }";
+
+            var variables = new { values = input };
+            var result = await _transport.SendQueryAsync<CreateOrderResponse>(mutation, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.CreateSalesOrder.Id;
+        }
+
+        /// <summary>
+        /// Generates a compensating credit note from an existing posted sales invoice.
+        /// </summary>
+        public async Task<string> GenerateCreditNoteAsync(string salesInvoiceId, CancellationToken cancellationToken = default)
+        {
+            const string mutation = @"
+            mutation ($input: GenerateCreditNoteGLDtoInput!) {
+                generateCreditNote(input: $input) {
+                    id
+                }
+            }";
+
+            var variables = new { input = new { salesInvoiceId } };
+            var result = await _transport.SendQueryAsync<GenerateCreditNoteResponse>(mutation, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.GenerateCreditNote.Id;
+        }
+
         private class SalesInvoicesResponse
         {
             [JsonPropertyName("salesInvoices")]
@@ -203,6 +339,36 @@ namespace Sage.Active.Services
         {
             [JsonPropertyName("salesOpenItemSettlement")]
             public SalesOpenItemSettlementResult SalesOpenItemSettlement { get; set; } = new SalesOpenItemSettlementResult();
+        }
+
+        private class SalesQuotesResponse
+        {
+            [JsonPropertyName("salesQuotes")]
+            public Connection<SalesQuote> SalesQuotes { get; set; } = new Connection<SalesQuote>();
+        }
+
+        private class CreateQuoteResponse
+        {
+            [JsonPropertyName("createSalesQuote")]
+            public SalesQuoteCreatedResult CreateSalesQuote { get; set; } = new SalesQuoteCreatedResult();
+        }
+
+        private class SalesOrdersResponse
+        {
+            [JsonPropertyName("salesOrders")]
+            public Connection<SalesOrder> SalesOrders { get; set; } = new Connection<SalesOrder>();
+        }
+
+        private class CreateOrderResponse
+        {
+            [JsonPropertyName("createSalesOrder")]
+            public SalesOrderCreatedResult CreateSalesOrder { get; set; } = new SalesOrderCreatedResult();
+        }
+
+        private class GenerateCreditNoteResponse
+        {
+            [JsonPropertyName("generateCreditNote")]
+            public CreditNoteGeneratedResult GenerateCreditNote { get; set; } = new CreditNoteGeneratedResult();
         }
     }
 }

@@ -66,6 +66,43 @@ namespace Sage.Active.Services
             return result.ProductPriceById;
         }
 
+        /// <summary>
+        /// Retrieves sales tariffs (pricing tiers and volume discount policies).
+        /// </summary>
+        public async Task<Connection<SalesTariff>> GetTariffsAsync(int first = 50, CancellationToken cancellationToken = default)
+        {
+            const string query = @"
+            query ($first: Int!) {
+                salesTariffs(order: [{ code: ASC }], first: $first) {
+                    edges {
+                        node {
+                            id
+                            code
+                            name
+                            description
+                            type
+                            enabled
+                            startDate
+                            endDate
+                            lines {
+                                id
+                                productId
+                                enabled
+                                indicatorValue
+                                startDate
+                                endDate
+                            }
+                        }
+                    }
+                    totalCount
+                }
+            }";
+
+            var variables = new { first };
+            var result = await _transport.SendQueryAsync<TariffsResponse>(query, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.SalesTariffs;
+        }
+
         private class ProductsResponse
         {
             [JsonPropertyName("products")]
@@ -76,6 +113,12 @@ namespace Sage.Active.Services
         {
             [JsonPropertyName("productPriceById")]
             public ProductPrice ProductPriceById { get; set; } = new ProductPrice();
+        }
+
+        private class TariffsResponse
+        {
+            [JsonPropertyName("salesTariffs")]
+            public Connection<SalesTariff> SalesTariffs { get; set; } = new Connection<SalesTariff>();
         }
     }
 }

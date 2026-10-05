@@ -68,6 +68,51 @@ namespace Sage.Active.Models.Entities
 
         [JsonPropertyName("rate")]
         public decimal? Rate { get; set; }
+
+        [JsonPropertyName("groupName")]
+        public string? GroupName { get; set; }
+
+        [JsonPropertyName("groupId")]
+        public string? GroupId { get; set; }
+
+        [JsonPropertyName("percentage")]
+        public decimal? Percentage { get; set; }
+
+        [JsonPropertyName("equivalenceSurchargePercentage")]
+        public decimal? EquivalenceSurchargePercentage { get; set; }
+
+        [JsonPropertyName("hasEquivalenceSurcharge")]
+        public bool? HasEquivalenceSurcharge { get; set; }
+
+        [JsonPropertyName("taxType")]
+        public string? TaxType { get; set; }
+
+        [JsonPropertyName("inactive")]
+        public bool? Inactive { get; set; }
+
+        [JsonPropertyName("effectiveDate")]
+        public DateTimeOffset? EffectiveDate { get; set; }
+
+        [JsonPropertyName("inactivationDate")]
+        public DateTimeOffset? InactivationDate { get; set; }
+    }
+
+    public class TaxGroup
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("taxGroupCode")]
+        public string? TaxGroupCode { get; set; }
+
+        [JsonPropertyName("taxType")]
+        public string? TaxType { get; set; }
+
+        [JsonPropertyName("vatTaxation")]
+        public string? VatTaxation { get; set; }
     }
 
     public class TaxTreatment
@@ -80,6 +125,45 @@ namespace Sage.Active.Models.Entities
 
         [JsonPropertyName("name")]
         public string? Name { get; set; }
+    }
+
+    public class PaymentTerm
+    {
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
+
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
+        [JsonPropertyName("modificationDate")]
+        public DateTimeOffset? ModificationDate { get; set; }
+
+        [JsonPropertyName("lines")]
+        public List<PaymentTermLine>? Lines { get; set; }
+    }
+
+    public class PaymentTermLine
+    {
+        [JsonPropertyName("id")]
+        public string? Id { get; set; }
+
+        [JsonPropertyName("type")]
+        public string? Type { get; set; }
+
+        [JsonPropertyName("paymentMeanId")]
+        public string? PaymentMeanId { get; set; }
+
+        [JsonPropertyName("day")]
+        public int? Day { get; set; }
+
+        [JsonPropertyName("condition")]
+        public string? Condition { get; set; }
+
+        [JsonPropertyName("order")]
+        public int? Order { get; set; }
+
+        [JsonPropertyName("payDays")]
+        public string? PayDays { get; set; }
     }
 
     public class AccountingEntry

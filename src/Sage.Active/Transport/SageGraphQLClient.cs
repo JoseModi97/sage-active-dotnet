@@ -22,43 +22,78 @@ namespace Sage.Active.Transport
         private readonly HttpClient _httpClient;
         private readonly SageActiveConfig _config;
         private readonly SageAuthClient _authClient;
+        private readonly SemaphoreSlim? _mutationSemaphore;
 
         private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         };
 
-        public SageGraphQLClient(SageActiveConfig config, HttpClient? httpClient = null, SageAuthClient? authClient = null)
+        public SageGraphQLClient(SageActiveConfig config, HttpClient? httpClient = null, SageAuthClient? authClient = null, SemaphoreSlim? mutationSemaphore = null)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _httpClient = httpClient ?? new HttpClient();
             _httpClient.Timeout = _config.Timeout;
             _authClient = authClient ?? new SageAuthClient(_config, _httpClient);
+            if (mutationSemaphore != null)
+            {
+                _mutationSemaphore = mutationSemaphore;
+            }
+            else if (_config.MaxConcurrentMutations > 0)
+            {
+                _mutationSemaphore = new SemaphoreSlim(_config.MaxConcurrentMutations, _config.MaxConcurrentMutations);
+            }
         }
 
         public SageActiveConfig Config => _config;
         public SageAuthClient Auth => _authClient;
+        public HttpClient HttpClient => _httpClient;
+        public SemaphoreSlim? MutationSemaphore => _mutationSemaphore;
 
         /// <summary>
         /// Executes a GraphQL query or mutation and returns the deserialized data envelope.
+        /// Throttles concurrent mutations according to Config.MaxConcurrentMutations.
         /// </summary>
         public async Task<TData> SendQueryAsync<TData>(string query, object? variables = null, string? operationName = null, CancellationToken cancellationToken = default)
         {
-            var request = new GraphQLRequest(query, variables, operationName);
-            var response = await SendRequestAsync<TData>(request, cancellationToken).ConfigureAwait(false);
-
-            if (response.HasErrors)
+            var isMut = _mutationSemaphore != null && IsMutation(query);
+            if (isMut)
             {
-                var firstError = response.Errors![0];
-                throw new SageApiException($"Sage Active GraphQL Error: {firstError.Message}", errors: response.Errors);
+                await _mutationSemaphore!.WaitAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            if (response.Data == null)
+            try
             {
-                throw new SageApiException("Sage Active returned empty data without errors.");
-            }
+                var request = new GraphQLRequest(query, variables, operationName);
+                var response = await SendRequestAsync<TData>(request, cancellationToken).ConfigureAwait(false);
 
-            return response.Data;
+                if (response.HasErrors)
+                {
+                    var firstError = response.Errors![0];
+                    throw new SageApiException($"Sage Active GraphQL Error: {firstError.Message}", errors: response.Errors);
+                }
+
+                if (response.Data == null)
+                {
+                    throw new SageApiException("Sage Active returned empty data without errors.");
+                }
+
+                return response.Data;
+            }
+            finally
+            {
+                if (isMut)
+                {
+                    _mutationSemaphore!.Release();
+                }
+            }
+        }
+
+        private static bool IsMutation(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) return false;
+            var trimmed = query.TrimStart();
+            return trimmed.StartsWith("mutation", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -120,53 +155,70 @@ namespace Sage.Active.Transport
 
         /// <summary>
         /// Executes a GraphQL multipart file upload adhering to the GraphQL Multipart Request Specification.
+        /// Throttles concurrent mutations according to Config.MaxConcurrentMutations.
         /// </summary>
         public async Task<TData> SendMultipartAsync<TData>(string query, object variables, Stream fileStream, string fileName, string contentType = "application/octet-stream", CancellationToken cancellationToken = default)
         {
-            var endpointUrl = $"{_config.GetEffectiveBaseAddress()}/graphql";
-
-            using var form = new MultipartFormDataContent();
-
-            // 1. operations part
-            var operations = JsonSerializer.Serialize(new
+            var isMut = _mutationSemaphore != null;
+            if (isMut)
             {
-                query = query,
-                variables = variables
-            }, JsonOptions);
-            form.Add(new StringContent(operations, Encoding.UTF8, "application/json"), "operations");
-
-            // 2. map part
-            var map = "{\"0\": [\"variables.input.file\"]}";
-            form.Add(new StringContent(map, Encoding.UTF8, "application/json"), "map");
-
-            // 3. file part
-            var fileContent = new StreamContent(fileStream);
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-            form.Add(fileContent, "0", fileName);
-
-            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpointUrl)
-            {
-                Content = form
-            };
-
-            await ApplyHeadersAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-
-            using var responseMessage = await _httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-            var responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-            if (!responseMessage.IsSuccessStatusCode)
-            {
-                throw new SageApiException($"Multipart upload failed with status {(int)responseMessage.StatusCode}: {responseBody}", (int)responseMessage.StatusCode);
+                await _mutationSemaphore!.WaitAsync(cancellationToken).ConfigureAwait(false);
             }
 
-            var graphQLResponse = JsonSerializer.Deserialize<GraphQLResponse<TData>>(responseBody, JsonOptions);
-            if (graphQLResponse == null || graphQLResponse.HasErrors)
+            try
             {
-                var error = graphQLResponse?.Errors?[0].Message ?? "Unknown multipart error";
-                throw new SageApiException($"Sage Active file upload failed: {error}", errors: graphQLResponse?.Errors);
-            }
+                var endpointUrl = $"{_config.GetEffectiveBaseAddress()}/graphql";
 
-            return graphQLResponse.Data!;
+                using var form = new MultipartFormDataContent();
+
+                // 1. operations part
+                var operations = JsonSerializer.Serialize(new
+                {
+                    query = query,
+                    variables = variables
+                }, JsonOptions);
+                form.Add(new StringContent(operations, Encoding.UTF8, "application/json"), "operations");
+
+                // 2. map part
+                var map = "{\"0\": [\"variables.input.file\"]}";
+                form.Add(new StringContent(map, Encoding.UTF8, "application/json"), "map");
+
+                // 3. file part
+                var fileContent = new StreamContent(fileStream);
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                form.Add(fileContent, "0", fileName);
+
+                using var requestMessage = new HttpRequestMessage(HttpMethod.Post, endpointUrl)
+                {
+                    Content = form
+                };
+
+                await ApplyHeadersAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+
+                using var responseMessage = await _httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+                var responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                if (!responseMessage.IsSuccessStatusCode)
+                {
+                    throw new SageApiException($"Multipart upload failed with status {(int)responseMessage.StatusCode}: {responseBody}", (int)responseMessage.StatusCode);
+                }
+
+                var graphQLResponse = JsonSerializer.Deserialize<GraphQLResponse<TData>>(responseBody, JsonOptions);
+                if (graphQLResponse == null || graphQLResponse.HasErrors)
+                {
+                    var error = graphQLResponse?.Errors?[0].Message ?? "Unknown multipart error";
+                    throw new SageApiException($"Sage Active file upload failed: {error}", errors: graphQLResponse?.Errors);
+                }
+
+                return graphQLResponse.Data!;
+            }
+            finally
+            {
+                if (isMut)
+                {
+                    _mutationSemaphore!.Release();
+                }
+            }
         }
 
         private async Task ApplyHeadersAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken)

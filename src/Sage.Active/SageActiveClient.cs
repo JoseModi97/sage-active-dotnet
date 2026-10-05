@@ -35,10 +35,13 @@ namespace Sage.Active
         public LocalizationClient Localization { get; }
 
         public SageActiveClient(SageActiveConfig config, HttpClient? httpClient = null)
+            : this(new SageGraphQLClient(config, httpClient))
         {
-            if (config == null) throw new ArgumentNullException(nameof(config));
+        }
 
-            _transport = new SageGraphQLClient(config, httpClient);
+        internal SageActiveClient(SageGraphQLClient transport)
+        {
+            _transport = transport ?? throw new ArgumentNullException(nameof(transport));
 
             Organizations = new OrganizationsClient(_transport);
             Users = new UsersClient(_transport);
@@ -51,6 +54,39 @@ namespace Sage.Active
             Files = new FilesClient(_transport);
             Catalog = new CatalogClient(_transport);
             Localization = new LocalizationClient(_transport);
+        }
+
+        /// <summary>
+        /// Creates a scoped clone of this client configured for a specific organization/tenant ID.
+        /// Reuses the underlying HTTP connection pool, token cache, and mutation concurrency throttler.
+        /// </summary>
+        public SageActiveClient WithOrganization(string organizationId)
+        {
+            if (string.IsNullOrWhiteSpace(organizationId))
+                throw new ArgumentException("Organization ID cannot be null or whitespace.", nameof(organizationId));
+
+            var clonedConfig = new SageActiveConfig
+            {
+                Region = Config.Region,
+                Environment = Config.Environment,
+                BaseAddress = Config.BaseAddress,
+                AuthUrl = Config.AuthUrl,
+                AccessTokenUrl = Config.AccessTokenUrl,
+                ClientId = Config.ClientId,
+                ClientSecret = Config.ClientSecret,
+                SubscriptionKey = Config.SubscriptionKey,
+                OrganizationId = organizationId,
+                AccessToken = Config.AccessToken,
+                RefreshToken = Config.RefreshToken,
+                Scopes = Config.Scopes,
+                CallbackUrl = Config.CallbackUrl,
+                Timeout = Config.Timeout,
+                MaxRetryAttempts = Config.MaxRetryAttempts,
+                MaxConcurrentMutations = Config.MaxConcurrentMutations
+            };
+
+            var transport = new SageGraphQLClient(clonedConfig, _transport.HttpClient, _transport.Auth, _transport.MutationSemaphore);
+            return new SageActiveClient(transport);
         }
 
         /// <summary>

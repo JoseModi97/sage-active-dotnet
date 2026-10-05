@@ -40,6 +40,26 @@ namespace Sage.Active.Cli
                     case "invoices":
                         await InvoiceCommand.ExecuteAsync(subArgs);
                         break;
+                    case "quote":
+                    case "quotes":
+                        await QuoteCommand.ExecuteAsync(subArgs);
+                        break;
+                    case "order":
+                    case "orders":
+                        await OrderCommand.ExecuteAsync(subArgs);
+                        break;
+                    case "tariff":
+                    case "tariffs":
+                        await TariffCommand.ExecuteAsync(subArgs);
+                        break;
+                    case "tax":
+                    case "taxes":
+                        await TaxCommand.ExecuteAsync(subArgs);
+                        break;
+                    case "bank":
+                    case "banking":
+                        await BankCommand.ExecuteAsync(subArgs);
+                        break;
                     case "env":
                     case "environment":
                         EnvCommand.Execute(subArgs);
@@ -52,7 +72,7 @@ namespace Sage.Active.Cli
                     case "version":
                     case "-v":
                     case "--version":
-                        Console.WriteLine("dotnet-sage-active version 1.0.0");
+                        Console.WriteLine("dotnet-sage-active version 1.0.3");
                         break;
                     default:
                         Prompter.Error($"Unknown command: '{command}'. Run 'sage-active --help' for usage.");
@@ -78,7 +98,7 @@ namespace Sage.Active.Cli
 /____/\__,_/\__, /\___//_/  |_|\___/\__/_/ |___/\___/  
            /____/                                      ");
             Console.ResetColor();
-            Console.WriteLine("Sage Active Public API V2 - Developer CLI & Setup Suite (1.0.0)\n");
+            Console.WriteLine("Sage Active Public API V2 - Developer CLI & Setup Suite\n");
             Console.WriteLine("Usage: sage-active [command] [options]\n");
             Console.WriteLine("Commands:");
             Console.WriteLine("  init              Interactive configuration setup wizard (saves credentials and org)");
@@ -87,6 +107,11 @@ namespace Sage.Active.Cli
             Console.WriteLine("  query <query>     Execute an arbitrary GraphQL query or query from a .graphql file");
             Console.WriteLine("  invoice [list]    List recent sales invoices");
             Console.WriteLine("  invoice create    Create and post a test sales invoice in Sandbox");
+            Console.WriteLine("  quote [list]      List sales quotes (devis)");
+            Console.WriteLine("  order [list]      List sales orders (commandes)");
+            Console.WriteLine("  tariff [list]     List sales pricing tariffs and stretch tiers");
+            Console.WriteLine("  tax [list|groups|terms] List fiscal taxes, tax groups, or payment terms");
+            Console.WriteLine("  bank [accounts|movements|unreconcile <id>] Banking operations");
             Console.WriteLine("  env [production|sandbox] View or toggle active environment");
             Console.WriteLine("  scaffold [type]   Scaffold starter boilerplate: minimal (API) or console");
             Console.WriteLine("  version           Display CLI version\n");

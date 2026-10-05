@@ -51,8 +51,47 @@ namespace Sage.Active.Models.Entities
         [JsonPropertyName("code")]
         public string Code { get; set; } = string.Empty;
 
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
+
         [JsonPropertyName("description")]
         public string? Description { get; set; }
+
+        [JsonPropertyName("type")]
+        public string? Type { get; set; }
+
+        [JsonPropertyName("enabled")]
+        public bool? Enabled { get; set; }
+
+        [JsonPropertyName("startDate")]
+        public DateTimeOffset? StartDate { get; set; }
+
+        [JsonPropertyName("endDate")]
+        public DateTimeOffset? EndDate { get; set; }
+
+        [JsonPropertyName("lines")]
+        public List<SalesTariffLine>? Lines { get; set; }
+    }
+
+    public class SalesTariffLine
+    {
+        [JsonPropertyName("id")]
+        public string? Id { get; set; }
+
+        [JsonPropertyName("productId")]
+        public string? ProductId { get; set; }
+
+        [JsonPropertyName("enabled")]
+        public bool? Enabled { get; set; }
+
+        [JsonPropertyName("indicatorValue")]
+        public decimal? IndicatorValue { get; set; }
+
+        [JsonPropertyName("startDate")]
+        public DateTimeOffset? StartDate { get; set; }
+
+        [JsonPropertyName("endDate")]
+        public DateTimeOffset? EndDate { get; set; }
     }
 
     public class SalesDiscount

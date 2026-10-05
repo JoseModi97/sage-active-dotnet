@@ -165,6 +165,123 @@ namespace Sage.Active.Services
             return result.Deleted;
         }
 
+        /// <summary>
+        /// Retrieves fiscal tax rates (TVA / VAT).
+        /// </summary>
+        public async Task<Connection<Tax>> GetTaxesAsync(int first = 50, CancellationToken cancellationToken = default)
+        {
+            const string query = @"
+            query ($first: Int!) {
+                taxes(first: $first) {
+                    edges {
+                        node {
+                            id
+                            code
+                            name
+                            rate
+                            groupName
+                            groupId
+                            percentage
+                            equivalenceSurchargePercentage
+                            hasEquivalenceSurcharge
+                            taxType
+                            inactive
+                            effectiveDate
+                            inactivationDate
+                        }
+                    }
+                    totalCount
+                }
+            }";
+
+            var variables = new { first };
+            var result = await _transport.SendQueryAsync<TaxesResponse>(query, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.Taxes;
+        }
+
+        /// <summary>
+        /// Retrieves tax classification groups.
+        /// </summary>
+        public async Task<Connection<TaxGroup>> GetTaxGroupsAsync(int first = 50, CancellationToken cancellationToken = default)
+        {
+            const string query = @"
+            query ($first: Int!) {
+                taxGroups(first: $first) {
+                    edges {
+                        node {
+                            id
+                            name
+                            taxGroupCode
+                            taxType
+                            vatTaxation
+                        }
+                    }
+                    totalCount
+                }
+            }";
+
+            var variables = new { first };
+            var result = await _transport.SendQueryAsync<TaxGroupsResponse>(query, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.TaxGroups;
+        }
+
+        /// <summary>
+        /// Retrieves tax treatments for customer and supplier fiscal categorization.
+        /// </summary>
+        public async Task<Connection<TaxTreatment>> GetTaxTreatmentsAsync(int first = 50, CancellationToken cancellationToken = default)
+        {
+            const string query = @"
+            query ($first: Int!) {
+                taxTreatments(first: $first) {
+                    edges {
+                        node {
+                            id
+                            code
+                            name
+                        }
+                    }
+                    totalCount
+                }
+            }";
+
+            var variables = new { first };
+            var result = await _transport.SendQueryAsync<TaxTreatmentsResponse>(query, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.TaxTreatments;
+        }
+
+        /// <summary>
+        /// Retrieves commercial payment terms (conditions de paiement).
+        /// </summary>
+        public async Task<Connection<PaymentTerm>> GetPaymentTermsAsync(int first = 50, CancellationToken cancellationToken = default)
+        {
+            const string query = @"
+            query ($first: Int!) {
+                paymentTerms(first: $first) {
+                    edges {
+                        node {
+                            id
+                            name
+                            modificationDate
+                            lines {
+                                id
+                                type
+                                paymentMeanId
+                                day
+                                condition
+                                order
+                                payDays
+                            }
+                        }
+                    }
+                    totalCount
+                }
+            }";
+
+            var variables = new { first };
+            var result = await _transport.SendQueryAsync<PaymentTermsResponse>(query, variables, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return result.PaymentTerms;
+        }
+
         private class ExercisesResponse
         {
             [JsonPropertyName("accountingExercises")]
@@ -199,6 +316,30 @@ namespace Sage.Active.Services
         {
             [JsonPropertyName("deleteAccountingEntry")]
             public bool Deleted { get; set; }
+        }
+
+        private class TaxesResponse
+        {
+            [JsonPropertyName("taxes")]
+            public Connection<Tax> Taxes { get; set; } = new Connection<Tax>();
+        }
+
+        private class TaxGroupsResponse
+        {
+            [JsonPropertyName("taxGroups")]
+            public Connection<TaxGroup> TaxGroups { get; set; } = new Connection<TaxGroup>();
+        }
+
+        private class TaxTreatmentsResponse
+        {
+            [JsonPropertyName("taxTreatments")]
+            public Connection<TaxTreatment> TaxTreatments { get; set; } = new Connection<TaxTreatment>();
+        }
+
+        private class PaymentTermsResponse
+        {
+            [JsonPropertyName("paymentTerms")]
+            public Connection<PaymentTerm> PaymentTerms { get; set; } = new Connection<PaymentTerm>();
         }
     }
 }

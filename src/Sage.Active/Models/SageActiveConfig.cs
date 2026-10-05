@@ -83,6 +83,12 @@ namespace Sage.Active.Models
         public int MaxRetryAttempts { get; set; } = 3;
 
         /// <summary>
+        /// Maximum concurrent active mutations permitted (default 10). Set to 0 or negative to disable throttling.
+        /// Protects against Sage Active rate limits and concurrent mutation concurrency limits.
+        /// </summary>
+        public int MaxConcurrentMutations { get; set; } = 10;
+
+        /// <summary>
         /// Resolves the effective Base Address.
         /// </summary>
         public string GetEffectiveBaseAddress()
